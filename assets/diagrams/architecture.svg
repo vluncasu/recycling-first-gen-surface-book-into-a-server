@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 390" width="1000" height="390">
+<style>.box{fill:#f6f9fb;stroke:#36546c;stroke-width:2}.title{font:700 19px Arial;fill:#142f40}.sub{font:14px Arial;fill:#425767}.lab{font:700 14px Arial;fill:#22546b}.link{stroke:#2c8b9c;stroke-width:3;fill:none;marker-end:url(#arr)}.muted{stroke:#9eacb5;stroke-width:2;stroke-dasharray:6 5;fill:none;marker-end:url(#arr2)}</style>
+<defs><marker id="arr" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6Z" fill="#2c8b9c"/></marker><marker id="arr2" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6Z" fill="#9eacb5"/></marker></defs>
+<rect x="40" y="45" width="265" height="112" rx="14" class="box"/><text x="60" y="78" class="title">Primary infrastructure</text><text x="60" y="105" class="sub">Main ISP + app services</text><text x="60" y="130" class="sub">Independent power domain*</text>
+<rect x="695" y="45" width="265" height="112" rx="14" class="box"/><text x="715" y="78" class="title">Mobile network</text><text x="715" y="105" class="sub">4G/5G phone hotspot</text><text x="715" y="130" class="sub">Phone battery / power bank</text>
+<rect x="325" y="235" width="350" height="130" rx="14" fill="#ebf9f5" stroke="#1b8e83" stroke-width="3"/><text x="352" y="274" class="title">Surface Book edge node</text><text x="352" y="303" class="sub">Debian + Docker + SSH + Tailscale</text><text x="352" y="332" class="sub">Internal battery; selected workloads</text>
+<path class="link" d="M173 157 C173 205 340 202 403 235"/><path class="link" d="M825 157 C825 205 661 202 598 235"/>
+<text x="112" y="202" class="lab">Network A</text><text x="797" y="202" class="lab">Network B</text><path class="muted" d="M307 104H690"/><text x="392" y="91" class="sub">Optional replication / health checks</text>
+</svg>

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="400" viewBox="0 0 1440 400">
+<defs><linearGradient id="bg" x2="1" y2="1"><stop stop-color="#101727"/><stop offset="1" stop-color="#182d3a"/></linearGradient><linearGradient id="ac" x2="1" y2="0"><stop stop-color="#3dd6c1"/><stop offset="1" stop-color="#66adff"/></linearGradient></defs>
+<rect width="1440" height="400" fill="url(#bg)"/><circle cx="1260" cy="50" r="240" fill="#244e68" opacity=".22"/><circle cx="1160" cy="350" r="210" fill="#174c43" opacity=".25"/>
+<rect x="92" y="80" width="290" height="182" rx="12" fill="#2a3a4a" stroke="#81a0af" stroke-width="5"/><rect x="104" y="92" width="266" height="158" rx="6" fill="#0f1724"/><path d="M95 271h300l30 33H66z" fill="#657883"/><rect x="148" y="305" width="230" height="9" rx="4" fill="#41505e"/>
+<path d="M170 154h75" stroke="url(#ac)" stroke-width="8" stroke-linecap="round"/><path d="M170 180h134" stroke="#65a6b5" stroke-width="5" stroke-linecap="round"/><circle cx="327" cy="166" r="12" fill="#42d9ae"/><path d="M435 195h62" stroke="#51dabd" stroke-width="3" stroke-dasharray="8 9"/>
+<text x="515" y="154" fill="#f1f7fb" font-size="52" font-family="Arial,sans-serif" font-weight="700">From broken display</text><text x="515" y="217" fill="#f1f7fb" font-size="52" font-family="Arial,sans-serif" font-weight="700">to resilient edge node.</text>
+<text x="517" y="272" fill="#8ec8ce" font-size="25" font-family="Arial,sans-serif">Surface Book 1  ·  Debian 13  ·  SSH  ·  Docker  ·  Tailscale</text>
+<path d="M515 300h490" stroke="url(#ac)" stroke-width="5" stroke-linecap="round"/>
+</svg>
