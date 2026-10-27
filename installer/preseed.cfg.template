@@ -1,0 +1,104 @@
+# Debian 13.7 Surface Book 1 - UEFI, non-LVM, headless server + __WIFI_SSID__ WPA2
+# DANGER: Automatically erases only the specifically model-checked Toshiba NVMe SSD.
+d-i debian-installer/locale string en_US.UTF-8
+d-i keyboard-configuration/xkb-keymap select us
+d-i netcfg/choose_interface select auto
+d-i netcfg/dhcp_timeout string 45
+d-i netcfg/disable_autoconfig boolean false
+d-i netcfg/get_hostname string __HOSTNAME__
+d-i netcfg/hostname string __HOSTNAME__
+d-i netcfg/get_domain string local
+# Wi-Fi is used by installer when it selects a wireless interface; Ethernet works too.
+d-i netcfg/wireless_essid string __WIFI_SSID__
+d-i netcfg/wireless_essid_again string __WIFI_SSID__
+d-i netcfg/wireless_security_type select wpa
+d-i netcfg/wireless_wpa string __WIFI_PASSWORD__
+d-i netcfg/wireless_wep string
+d-i hw-detect/load_firmware boolean true
+
+d-i mirror/country string manual
+d-i mirror/http/hostname string deb.debian.org
+d-i mirror/http/directory string /debian
+d-i mirror/http/proxy string
+
+d-i passwd/root-login boolean false
+d-i passwd/make-user boolean true
+d-i passwd/user-fullname string Surface Book edge node
+d-i passwd/username string __USERNAME__
+d-i passwd/user-password-crypted password __USER_PASSWORD_HASH__
+
+d-i clock-setup/utc boolean true
+d-i time/zone string __TIMEZONE__
+d-i clock-setup/ntp boolean true
+
+# Protect other disks. Stop partitioning if Toshiba SSD model is not confirmed.
+d-i preseed/early_command string /bin/sh /cdrom/surface-usb-logger.sh start
+
+d-i partman/early_command string /bin/sh /cdrom/surface-usb-logger.sh snapshot; /bin/sh /cdrom/surface-disk-guard.sh
+d-i partman-auto/disk string /dev/nvme0n1
+d-i partman-auto/method string regular
+d-i partman-partitioning/choose_label select gpt
+d-i partman-partitioning/default_label string gpt
+d-i partman-efi/non_efi_system boolean true
+d-i partman-lvm/device_remove_lvm boolean true
+d-i partman-lvm/confirm boolean true
+d-i partman-lvm/confirm_nooverwrite boolean true
+d-i partman-md/device_remove_md boolean true
+d-i partman-auto/expert_recipe string \
+   surface-root :: \
+      768 768 768 free \
+         $iflabel{ gpt } $primary{ } $reusemethod{ } method{ efi } format{ } \
+      . \
+      10000 50000 1000000000 ext4 \
+         $primary{ } method{ format } format{ } \
+         use_filesystem{ } filesystem{ ext4 } mountpoint{ / } \
+      .
+d-i partman-auto/choose_recipe select surface-root
+# IMPORTANT: Debian bug #1108631: true loops at blue screen with no swap.
+# false answers No to the question about returning to partitioning.
+d-i partman-basicfilesystems/no_swap boolean false
+d-i partman-partitioning/confirm_write_new_label boolean true
+d-i partman/choose_partition select finish
+d-i partman/confirm boolean true
+d-i partman/confirm_nooverwrite boolean true
+
+d-i apt-setup/non-free-firmware boolean true
+d-i apt-setup/contrib boolean true
+d-i apt-setup/non-free boolean true
+d-i apt-setup/disable-cdrom-entries boolean true
+d-i apt-setup/services-select multiselect security, updates
+
+tasksel tasksel/first multiselect standard, ssh-server
+d-i pkgsel/include string openssh-server sudo avahi-daemon docker.io docker-compose cockpit cockpit-networkmanager curl ca-certificates firmware-libertas network-manager wpasupplicant rfkill jq
+d-i pkgsel/upgrade select none
+popularity-contest popularity-contest/participate boolean false
+
+d-i grub-installer/only_debian boolean true
+d-i grub-installer/with_other_os boolean true
+d-i grub-installer/bootdev string /dev/nvme0n1
+d-i grub-installer/force-efi-extra-removable boolean true
+d-i grub-installer/update-nvram boolean false
+d-i grub-installer/skip boolean false
+grub-efi-amd64 grub2/force_efi_extra_removable boolean true
+grub-efi-amd64 grub2/update_nvram boolean false
+
+# Save SSH public key and Wi-Fi NetworkManager profile for boot-time auto-connect.
+d-i preseed/late_command string \
+   set -e; \
+   mkdir -p /target/home/__USERNAME__/.ssh; \
+   cp /cdrom/surface-key.pub /target/home/__USERNAME__/.ssh/authorized_keys; \
+   in-target chown -R __USERNAME__:__USERNAME__ /home/__USERNAME__/.ssh; \
+   in-target chmod 700 /home/__USERNAME__/.ssh; \
+   in-target chmod 600 /home/__USERNAME__/.ssh/authorized_keys; \
+   mkdir -p /target/etc/NetworkManager/system-connections; \
+   cp /cdrom/WiFi.nmconnection /target/etc/NetworkManager/system-connections/WiFi.nmconnection; \
+   chmod 600 /target/etc/NetworkManager/system-connections/WiFi.nmconnection; \
+   cp /cdrom/surface-postinstall.sh /target/root/surface-postinstall.sh; \
+   in-target chmod 700 /root/surface-postinstall.sh; \
+   in-target /bin/bash /root/surface-postinstall.sh; \
+   /bin/sh /cdrom/surface-usb-logger.sh snapshot; \
+   /bin/sh /cdrom/surface-usb-logger.sh success
+
+d-i finish-install/reboot_in_progress note
+# Power off at the end: never automatically re-boot the same destructive USB.
+d-i debian-installer/exit/halt boolean true
