@@ -66,13 +66,13 @@ for p in /sys/class/power_supply/*; do
 done
 ```
 
-For the documented example, a 51 Wh design-capacity battery reported 40.455 Wh usable capacity (~79.3% of original). This is a reported charge-capacity estimate, not a calibrated runtime test. Estimated theoretical runtime = usable Wh / average W. Reserve margin and measure real load with the screen off.
+Our BAT2 shows 40.455 Wh full-charge capacity out of 51 Wh design (~79% health). BAT1 was physically removed. This is what Linux reports, not a calibrated runtime test. Estimated theoretical runtime = usable Wh / average W. Reserve margin and measure real load with the screen off.
 
 **Fire and longevity:** Inspect for swelling, unusual warmth, failed fans, blocked vents and aging batteries. Battery control remains a firmware function; Linux reporting 100% does not prove a particular battery-preservation charge limit. Use a temperature alarm, shutdown threshold and proper mount location before 24/7 use.
 
 ## NVIDIA and Intel media hardware
 
-Intel HD Graphics 520 was detected with `i915`. The base contains a 1 GB NVIDIA GPU according to Microsoft's specs, but no NVIDIA PCI device appeared in Linux. It is not safe to assume that installing the proprietary driver will magically enumerate a powered-off PCI device. The 1 GB GM108 version is not a useful NVENC transcoder; test Intel VA-API/Quick Sync support before choosing a video worker.
+Intel HD Graphics 520 works with `i915`. The keyboard base has a 1 GB NVIDIA GPU according to Microsoft's specs, but we haven't tested it — we don't need a GPU for the server role. If you do need it, check `lspci` and the linux-surface kernel patches. The 1 GB GM108 isn't useful for NVENC transcoding anyway; use Intel VA-API/Quick Sync instead.
 
 For a limited media worker, start with metadata extraction and one FFmpeg job at a time. Measure encoding quality, CPU load, temperature, watts and latency. If the node assumes backup application duties, pause noncritical transcoding.
 

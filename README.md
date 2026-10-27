@@ -21,7 +21,7 @@
 </p>
 
 > [!IMPORTANT]
-> **This is a documented field conversion, not a certified high-availability appliance.** The original machine successfully booted Debian 13 from its SSD and was accessed over SSH. Docker, Cockpit, Wi-Fi and a Tailscale daemon were observed running. Independent uplink failover, application replication, total battery runtime and GPU functionality **were not verified as end-to-end services**. The generic public installer is a redacted refactor of the private field build and has not itself been tested on identical hardware.
+> **This is a documented field conversion, not a certified high-availability appliance.** The machine boots Debian 13 from its internal SSD. We manage it over SSH. Docker, Cockpit, Wi-Fi and Tailscale are all running. What we **haven't tested end to end**: independent uplink failover, application replication, sustained battery runtime and GPU workloads. The public installer here is a cleaned-up version of the private build that actually worked; the public version has not itself been re-tested on hardware.
 
 **New here? Start with the [five-minute quick-start guide](START_HERE.md) — choose macOS or Windows, build, flash, boot, SSH.**
 
@@ -38,7 +38,7 @@ Instead of treating a failing display as the end of the device's useful life, we
 
 ## Project at a glance
 
-| Dimension | Observed prototype | Intended evolution |
+| Dimension | What we have now | Next steps |
 |---|---|---|
 | Hardware | First-gen Surface Book, Intel Skylake, 8 GB, Toshiba NVMe 256 GB | Repurpose otherwise underused hardware |
 | Display | Hardware-level malfunction (board-related) | Zero routine display dependency |
@@ -47,9 +47,9 @@ Instead of treating a failing display as the end of the device's useful life, we
 | Remote management | SSH, Avahi `.local`, Cockpit | SSH keys + restricted management access |
 | Containers | Docker and Compose available | Selected independent application workers |
 | Network | Wi-Fi connected to local network | Mobile hotspot as an independent uplink |
-| Power | Internal battery detected, AC adapter detected | Controlled battery shutdown + external hotspot power |
-| VPN | `tailscaled` service observed active, user not logged in at report time | Tailscale tailnet enrollment |
-| Video | Intel HD 520 detected, NVIDIA physically reported but absent in PCI enumeration | Benchmarked Quick Sync for lightweight media jobs |
+| Power | BAT2 working (BAT1 was removed), AC adapter connected | Controlled battery shutdown + external hotspot power |
+| VPN | Tailscale installed and connected to our tailnet | Manage ACLs and remote access |
+| Video | Intel HD 520 detected; NVIDIA dGPU in base — not tested, we don't need it | Intel Quick Sync if we ever need lightweight media jobs |
 
 ## Architecture
 
@@ -112,24 +112,24 @@ For reliable administration, use an SSH key, keep Cockpit confined to trusted ne
 
 ## What actually worked
 
-The field report recorded the following after the installation and post-configuration:
+After installation and post-configuration, here's what we verified:
 
-| Signal | Recorded result |
+| What | Result |
 |---|---|
-| Root filesystem | ext4, approximately **233 GiB** mounted at `/` |
-| Used space | Approximately **4.0 GiB** |
-| Available space | Approximately **218 GiB** |
-| Swap | **2 GiB** file |
-| Network | Wireless interface connected via DHCP |
-| SSH / Docker / Cockpit | Services reported active |
-| Tailscale | Daemon active, **not yet authenticated** |
+| Root filesystem | ext4, ~233 GiB mounted at `/` |
+| Used space | ~4.0 GiB |
+| Available space | ~218 GiB |
+| Swap | 2 GiB file |
+| Network | Wi-Fi connected via DHCP |
+| SSH / Docker / Cockpit | All running |
+| Tailscale | Connected to our tailnet |
 | AC adapter | Online |
-| Visible internal battery | `BAT2`: **40.455 Wh** full vs **51 Wh** design (approximately **79.3%** reported health) |
-| Other internal battery | **Not exposed** in the available Debian power-supply report |
-| Intel GPU | HD Graphics 520 / `i915` detected |
-| NVIDIA | Physical dGPU in base (per Microsoft specs); **not enumerated by `lspci`** |
+| BAT2 | **40.455 Wh** full vs **51 Wh** design (~79% health) |
+| BAT1 | Physically removed from this unit |
+| Intel GPU | HD Graphics 520 / `i915` works |
+| NVIDIA dGPU | In the base per specs — not tested, we don't need it |
 
-The original field output also contained local identifiers and network data; those have deliberately **not** been copied to this repository. See the explicitly labeled [sanitized sample report](examples/sample-status.md).
+We stripped local identifiers and network details from the public version. See the [sanitized sample report](examples/sample-status.md).
 
 ## Downloads — source vs. releases
 

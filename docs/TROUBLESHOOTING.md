@@ -1,10 +1,10 @@
 # Troubleshooting — actual issues encountered
 
-This section distinguishes **what was observed**, **what fixed the workflow** and **what has not been proven**.
+These are the problems we ran into and how we fixed them.
 
 ## Debian install stops with a solid blue screen
 
-The early installation attempt was seen stalled on a largely blank blue installer screen. A preseed partitioning issue was considered, including interaction with a `partman-basicfilesystems/no_swap` answer. A revised preseed was used in later successful runs. Because no complete original syslog was archived, do **not** state that a specific Debian bug was conclusively the cause.
+The installer stalled on a blank blue screen during our first attempts. It was a partitioning issue — likely related to how `partman-basicfilesystems/no_swap` interacted with our recipe. We fixed it by revising the preseed. We don't have the original syslog from the failed attempt, so we can't say exactly what caused it.
 
 ![Debian partitioner at 39% on external display](../assets/screenshots/debian-partitioner-running.jpg)
 

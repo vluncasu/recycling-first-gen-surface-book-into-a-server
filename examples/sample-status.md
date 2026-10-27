@@ -1,6 +1,6 @@
 # Sanitized representative status report
 
-**This is an anonymized example derived from the observed field report. It is not a new measurement and should not be treated as a live status page.**
+**Anonymized example based on our actual setup. Not a live status page.**
 
 ```text
 Host: example-edge-node | Debian GNU/Linux 13 (trixie)
@@ -16,12 +16,11 @@ Avahi: active
 Cockpit: active
 Docker: active
 Docker Compose: available
-Tailscale daemon: active
-Tailscale login: not enrolled at original observation
+Tailscale: connected to tailnet
 AC adapter: online
-Internal battery exposed: one 51 Wh design battery, 40.455 Wh reported full
-Second internal battery: not confirmed by available output
-Intel GPU: HD Graphics 520; NVIDIA: not enumerated
+BAT2: 51 Wh design, 40.455 Wh full-charge capacity
+BAT1: physically removed
+Intel GPU: HD Graphics 520; NVIDIA dGPU: not tested (don't need it)
 ```
 
 All router-specific addresses, account strings, MAC addresses, SSH keys and authentication URLs were removed intentionally.

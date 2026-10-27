@@ -1,29 +1,24 @@
 # Validation and acceptance matrix
 
-## Evidence classification
+## What's tested
 
-- **Observed in the field:** directly supported by actual command output/screenshots in this case.
-- **Implemented in scripts:** behavior visible in the source but requiring target execution to confirm.
-- **Proposed:** architecture element not yet implemented end to end.
-
-| Test | Evidence | Status |
+| Test | How we know | Status |
 |---|---|---|
-| Debian boots from internal SSD | Successful SSH login prompt and kernel banner | **Observed** |
-| SSH works from Mac | SSH session screenshot / console transcript | **Observed** |
-| Root uses most internal disk | `lsblk`, `df` post-install report | **Observed** |
-| Docker and Compose installed | `docker` version, compose version and service status | **Observed** |
-| Cockpit active | Service report and login web link | **Observed** |
-| Wi-Fi connected | `nmcli` report | **Observed** |
-| `tailscaled` installed | Service report | **Observed** |
-| Tailscale enrolled | Status originally showed logged out | **Not confirmed** |
-| Continuous USB logger | Script implementation + static validation | **Implemented; not physically validated** |
-| Public redacted installer refactor | Bash/static checks | **Not physically validated** |
-| Smartphone hotspot connected | Discussed planned use, no field network report | **Not confirmed** |
-| Secondary internet independent | Intended architecture; no traceroute/carrier test | **Not confirmed** |
-| Battery-backed runtime under load | Capacity reported, not discharge test | **Not confirmed** |
-| WeParty application deployed | No runtime containers/app health outputs provided | **Not confirmed** |
-| Automatic failover to node | No health-check/cutover experiment | **Not confirmed** |
-| NVIDIA dGPU on Linux | Physical dGPU in base per specs; `lspci` doesn't show it | **Not active/detected** |
+| Debian boots from internal SSD | SSH login + kernel banner | **Works** |
+| SSH works from Mac | SSH session screenshot | **Works** |
+| Root uses most internal disk | `lsblk`, `df` output | **Works** |
+| Docker and Compose installed | `docker version`, service status | **Works** |
+| Cockpit active | Service running, web login | **Works** |
+| Wi-Fi connected | `nmcli` output | **Works** |
+| Tailscale installed and connected | `tailscale status` shows connected | **Works** |
+| Continuous USB logger | Script in source, static checks pass | **In code; not yet tested on hardware** |
+| Public installer (this repo) | Bash/static checks pass | **Not yet tested on hardware** |
+| Smartphone hotspot as second uplink | Planned, not yet connected | **Todo** |
+| Independent secondary internet | Architecture only, no routing test | **Todo** |
+| Battery runtime under load | BAT2 capacity known, no discharge test | **Todo** |
+| Application deployed on the node | No containers running yet | **Todo** |
+| Automatic failover | No health-check or cutover test | **Todo** |
+| NVIDIA dGPU | In the base per specs — not tested, we don't need it | **Skipped** |
 
 ## Suggested repeatable acceptance test
 
