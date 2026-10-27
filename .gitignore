@@ -1,0 +1,32 @@
+# Never commit generated ISOs, installer credentials, raw logs, SSH material.
+*.iso
+*.img
+*.qcow2
+*.partial
+.env
+.env.*
+!.env.example
+*.nmconnection
+!*.nmconnection.template
+preseed.cfg
+!preseed.cfg.template
+*.pem
+id_ed25519*
+*.key
+SURFACELOG*
+INSTALLER.LOG*
+ERORI.TXT*
+DMESG.LOG*
+PARTMAN.LOG*
+ACCES_*.txt
+*RAPORT*.txt
+__pycache__/
+.DS_Store
+*/.DS_Store
+
+# Release outputs and Windows/Linux generated private media
+dist/
+output/
+*.p12
+*.pfx
+*.ppk
