@@ -1,0 +1,38 @@
+name: Release installation bundles
+on:
+  push:
+    tags:
+      - 'v*'
+permissions:
+  contents: write
+jobs:
+  windows-syntax:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Parse Windows scripts
+        shell: pwsh
+        run: |
+          foreach ($file in @('windows/Build_Installer_Windows.ps1','windows/Postconfigure_from_Windows.ps1')) {
+            $tokens = $null; $errors = $null
+            [System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path $file), [ref]$tokens, [ref]$errors) | Out-Null
+            if ($errors.Count -gt 0) { $errors | Out-String | Write-Error; throw "Parser errors in $file" }
+          }
+  release:
+    needs: windows-syntax
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run static checks
+        run: bash scripts/test-static.sh
+      - name: Build release ZIPs and checksums
+        run: python3 scripts/build_release.py --version "${GITHUB_REF_NAME}"
+      - name: Upload beta release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" dist/*.zip dist/SHA256SUMS.txt \
+            --verify-tag --prerelease \
+            --title "Surface Book resilient edge installer ${GITHUB_REF_NAME}" \
+            --notes-file docs/RELEASE_NOTES.md

@@ -1,0 +1,25 @@
+name: Static checks
+on:
+  push:
+  pull_request:
+jobs:
+  scripts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check Bash, POSIX sh, Python and source redaction
+        run: bash scripts/test-static.sh
+
+  windows-powershell:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Parse Windows PowerShell scripts
+        shell: pwsh
+        run: |
+          $files = @('windows/Build_Installer_Windows.ps1','windows/Postconfigure_from_Windows.ps1')
+          foreach ($file in $files) {
+            $tokens = $null; $errors = $null
+            [System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path $file), [ref]$tokens, [ref]$errors) | Out-Null
+            if ($errors.Count -gt 0) { $errors | Out-String | Write-Error; throw "Parser errors in $file" }
+          }
